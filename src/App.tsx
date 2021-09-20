@@ -1,26 +1,34 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import "./App.scss";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import { Canvas } from "./Canvas";
+import { ControlPanel } from "./ControlPanel";
+
+export interface rectangleType {
+  xStart: number;
+  yStart: number;
+  width: number;
+  height: number;
+  color: string;
 }
 
-export default App;
+export const App: React.FC = () => {
+  const [rectangles, setRectangles] = React.useState<rectangleType[]>([]);
+
+  const pushRectangles = (newRect: rectangleType): void => {
+    setRectangles((prev) => [...prev, newRect]);
+  };
+
+  const deleteRectangle = (index: number): void => {
+    setRectangles((prev) => [
+      ...prev.filter((item, itemIndex) => itemIndex !== index),
+    ]);
+  };
+
+  return (
+    <div className="app">
+      <Canvas rectangles={rectangles} pushRectangles={pushRectangles} />
+      <ControlPanel rectangles={rectangles} deleteRectangle={deleteRectangle} />
+    </div>
+  );
+};
