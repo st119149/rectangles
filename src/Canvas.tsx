@@ -37,9 +37,13 @@ export const Canvas: React.FC<CanvasPropsType> = ({
       sceleton.current.style.height = `${height}px`;
       sceleton.current.style.top = `${yStart}px`;
       sceleton.current.style.left = `${xStart}px`;
-      sceleton.current.style.border = "3px solid #abd5ff";
-      sceleton.current.style.borderRadius = "3px";
+      sceleton.current.style.border = "2px solid #abd5ff";
+      sceleton.current.style.borderRadius = "5px";
     }
+  };
+
+  const mouseLeaveHandler = (e: React.MouseEvent) => {
+    setMouseIsDown(false);
   };
 
   const mouseUpHandler = (e: React.MouseEvent) => {
@@ -50,10 +54,6 @@ export const Canvas: React.FC<CanvasPropsType> = ({
 
     const width = Math.abs(e.clientX - XDown.current);
     const height = Math.abs(e.clientY - YDown.current);
-
-    if (width < 5 || height < 5) {
-      return;
-    }
 
     const randomColor = `rgb(
       ${Math.round(Math.random() * 255)},
@@ -76,6 +76,7 @@ export const Canvas: React.FC<CanvasPropsType> = ({
       onMouseDown={mouseDownHandler}
       onMouseUp={mouseUpHandler}
       onMouseMove={mouseMoveHandler}
+      onMouseLeave={mouseLeaveHandler}
       className="canvas"
     >
       {rectangles.map((item) => (
