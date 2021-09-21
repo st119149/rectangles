@@ -13,12 +13,38 @@ export const Canvas: React.FC<CanvasPropsType> = ({
   const XDown = React.useRef<number>(0);
   const YDown = React.useRef<number>(0);
 
+  const [mouseIsDown, setMouseIsDown] = React.useState<boolean>(false);
+  const sceleton = React.useRef<HTMLDivElement>(null);
+
   const mouseDownHandler = (e: React.MouseEvent) => {
     XDown.current = e.clientX;
     YDown.current = e.clientY;
+    setMouseIsDown(true);
+  };
+
+  const mouseMoveHandler = (e: React.MouseEvent) => {
+    if (!mouseIsDown) return;
+
+    const xStart = e.clientX - XDown.current < 0 ? e.clientX : XDown.current;
+    const yStart = e.clientY - YDown.current < 0 ? e.clientY : YDown.current;
+
+    const width = Math.abs(e.clientX - XDown.current);
+    const height = Math.abs(e.clientY - YDown.current);
+
+    if (sceleton.current !== null) {
+      sceleton.current.style.position = "absolute";
+      sceleton.current.style.width = `${width}px`;
+      sceleton.current.style.height = `${height}px`;
+      sceleton.current.style.top = `${yStart}px`;
+      sceleton.current.style.left = `${xStart}px`;
+      sceleton.current.style.border = "3px solid #abd5ff";
+      sceleton.current.style.borderRadius = "3px";
+    }
   };
 
   const mouseUpHandler = (e: React.MouseEvent) => {
+    setMouseIsDown(false);
+
     const xStart = e.clientX - XDown.current < 0 ? e.clientX : XDown.current;
     const yStart = e.clientY - YDown.current < 0 ? e.clientY : YDown.current;
 
@@ -49,6 +75,7 @@ export const Canvas: React.FC<CanvasPropsType> = ({
     <div
       onMouseDown={mouseDownHandler}
       onMouseUp={mouseUpHandler}
+      onMouseMove={mouseMoveHandler}
       className="canvas"
     >
       {rectangles.map((item) => (
@@ -65,6 +92,7 @@ export const Canvas: React.FC<CanvasPropsType> = ({
           }}
         ></div>
       ))}
+      {mouseIsDown && <div ref={sceleton}></div>}
     </div>
   );
 };
