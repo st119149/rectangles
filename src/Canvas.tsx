@@ -61,14 +61,14 @@ export const Canvas: React.FC<CanvasPropsType> = ({
       ${Math.round(Math.random() * 255)}
     )`;
 
-    const newRect = {
+    const newRectangle = {
       xStart,
       yStart,
       width,
       height,
       color: randomColor,
     };
-    pushRectangles(newRect);
+    pushRectangles(newRectangle);
   };
 
   return (
